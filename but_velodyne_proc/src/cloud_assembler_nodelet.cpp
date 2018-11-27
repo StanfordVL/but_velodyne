@@ -52,6 +52,5 @@ private:
 } // namespace but_velodyne_proc
 
 // Register this plugin with pluginlib. Names must match nodelets.xml.
-PLUGINLIB_DECLARE_CLASS(but_velodyne_proc, CloudAssemblerNodelet,
-		but_velodyne_proc::CloudAssemblerNodelet, nodelet::Nodelet);
+PLUGINLIB_EXPORT_CLASS(but_velodyne_proc::CloudAssemblerNodelet, nodelet::Nodelet);
 

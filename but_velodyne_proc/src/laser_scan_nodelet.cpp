@@ -54,7 +54,5 @@ private:
 
 
 // Register this plugin with pluginlib. Names must match nodelets.xml.
-PLUGINLIB_DECLARE_CLASS(but_velodyne_proc,
-                        LaserScanNodelet,
-                        but_velodyne_proc::LaserScanNodelet,
+PLUGINLIB_EXPORT_CLASS( but_velodyne_proc::LaserScanNodelet,
                         nodelet::Nodelet);

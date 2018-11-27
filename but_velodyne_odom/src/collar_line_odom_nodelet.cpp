@@ -43,7 +43,5 @@ class CollarLineOdomNodelet : public nodelet::Nodelet{
 } // namespace but_velodyne_odom
 
 #include <pluginlib/class_list_macros.h>
-PLUGINLIB_DECLARE_CLASS(but_velodyne_odom,
-                        CollarLineOdomNodelet,
-                        but_velodyne_odom::CollarLineOdomNodelet,
+PLUGINLIB_EXPORT_CLASS( but_velodyne_odom::CollarLineOdomNodelet,
                         nodelet::Nodelet);

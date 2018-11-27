@@ -62,6 +62,12 @@ target_link_libraries( butvelo_cloudassembler_nodelet butvelo )
 
 # TODO install nodes etc.
 
+install(TARGETS butvelo butvelo_laserscan_nodelet laser_scan butvelo_groundmap_nodelet ground_map cloud_assembler butvelo_cloudassembler_nodelet
+  ARCHIVE DESTINATION ${CATKIN_PACKAGE_LIB_DESTINATION}
+  LIBRARY DESTINATION ${CATKIN_PACKAGE_LIB_DESTINATION}
+  RUNTIME DESTINATION ${CATKIN_PACKAGE_BIN_DESTINATION}
+)
+
 install(FILES 
   nodelets.xml
   DESTINATION ${CATKIN_PACKAGE_SHARE_DESTINATION})
