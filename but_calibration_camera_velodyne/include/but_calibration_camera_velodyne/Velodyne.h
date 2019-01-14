@@ -162,7 +162,7 @@ public:
   void normalizeIntensity(float min = 0.0, float max = 1.0);
   ::pcl::PointCloud<pcl::PointXYZ> *toPointsXYZ();
 
-  static const unsigned RINGS_COUNT = 32;
+  static const unsigned RINGS_COUNT = 16;
   std::vector<std::vector<Point*> > getRings();
 
 protected:

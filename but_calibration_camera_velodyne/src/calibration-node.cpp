@@ -74,6 +74,7 @@ Calibration6DoF calibration(bool doRefinement = false)
   vector<Point2f> centers2D;
   if (!marker.detectCirclesInImage(centers2D, radii2D))
   {
+    std::cout << "Bad Image Detection!" << std::endl;
     return Calibration6DoF::wrong();
   }
   float radius2D = accumulate(radii2D.begin(), radii2D.end(), 0.0) / radii2D.size();
@@ -82,6 +83,7 @@ Calibration6DoF calibration(bool doRefinement = false)
   vector<Point3f> centers3D;
   if (!marker.detectCirclesInPointCloud(centers3D, radii3D))
   {
+    std::cout << "Bad PointCloud Detection!" << std::endl;    
     return Calibration6DoF::wrong();
   }
   float radius3D = accumulate(radii3D.begin(), radii3D.end(), 0.0) / radii3D.size();
@@ -116,7 +118,9 @@ void callback(const sensor_msgs::ImageConstPtr& msg_img, const sensor_msgs::Came
 
   ROS_INFO_STREAM("Image received at " << msg_img->header.stamp.toSec());
   ROS_INFO_STREAM( "Camera info received at " << msg_info->header.stamp.toSec());
+  ROS_INFO_STREAM( "Camera info width " << msg_info->width);  
   ROS_INFO_STREAM( "Velodyne scan received at " << msg_pc->header.stamp.toSec());
+  ROS_INFO_STREAM( "Velodyne points " << msg_pc->width);
 
   // Loading camera image:
   cv_bridge::CvImagePtr cv_ptr = cv_bridge::toCvCopy(msg_img, sensor_msgs::image_encodings::BGR8);

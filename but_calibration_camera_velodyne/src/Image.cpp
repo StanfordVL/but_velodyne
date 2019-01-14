@@ -156,6 +156,8 @@ bool Image::detect4Circles(float canny_thresh, float center_thresh, vector<Point
     HoughCircles(src_gray, circles, CV_HOUGH_GRADIENT, 1, src_gray.rows / 8, canny_thresh, thresh, 0, 0);
   }
 
+  std::cout << circles.size() << std::endl;
+
   if (circles.size() != 4)
   {
     return false;
@@ -172,7 +174,6 @@ bool Image::detect4Circles(float canny_thresh, float center_thresh, vector<Point
   }
 
   /// Draw the circles detected
-  /*
    Mat src_rgb;
    cvtColor(img, src_rgb, CV_GRAY2BGR );
    vector<Scalar> colors;
@@ -193,8 +194,7 @@ bool Image::detect4Circles(float canny_thresh, float center_thresh, vector<Point
    }
    namedWindow("Hough Circle Transform Demo", CV_WINDOW_AUTOSIZE);
    imshow("Hough Circle Transform Demo", src_rgb);
-   waitKey(0);
-   */
+   waitKey(5);
 
   return true;
 }
