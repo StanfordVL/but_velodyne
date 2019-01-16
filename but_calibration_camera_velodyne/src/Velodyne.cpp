@@ -205,7 +205,7 @@ Velodyne::Velodyne Velodyne::Velodyne::threshold(float thresh)
 void Velodyne::Velodyne::detectPlanes(cv::Mat projection)
 {
   PointCloud<Point> visible_points;
-  this->project(projection, Rect(0, 0, 640, 480), &visible_points);
+  this->project(projection, Rect(0, 0, 672, 376), &visible_points);
   // ...
 }
 

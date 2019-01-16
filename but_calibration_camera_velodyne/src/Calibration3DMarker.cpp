@@ -27,16 +27,22 @@ Calibration3DMarker::Calibration3DMarker(cv::Mat _frame_gray, cv::Mat _P, ::Poin
   std::cout << "Input PC = " << pc.size() << std::endl;
   
   Velodyne::Velodyne scan(pc);
+
   scan.getRings();
   scan.intensityByRangeDiff();
+
+
   PointCloud<Velodyne::Point> visible_cloud;
   scan.project(P, Rect(0, 0, 672, 376), &visible_cloud);
 
-  std::cout << "Visible PC = " << visible_cloud.size() << std::endl; 
+  std::cout << "Visible PC = " << visible_cloud.size() << std::endl;
 
   Velodyne::Velodyne visible_scan(visible_cloud);
+
+  PointCloud<PointXYZ>::Ptr xyz_cloud_test(visible_scan.toPointsXYZ());
+
   visible_scan.normalizeIntensity();
-  Velodyne::Velodyne thresholded_scan = visible_scan.threshold(0.1);
+  Velodyne::Velodyne thresholded_scan = visible_scan.threshold(0.0);
 
   PointCloud<PointXYZ>::Ptr xyz_cloud_ptr(thresholded_scan.toPointsXYZ());
 
@@ -44,8 +50,8 @@ Calibration3DMarker::Calibration3DMarker(cv::Mat _frame_gray, cv::Mat _P, ::Poin
   viewer.showCloud(xyz_cloud_ptr);
 
   while (!viewer.wasStopped ())
-    {
-    }
+  {
+  }
 
   SampleConsensusModelPlane<PointXYZ>::Ptr model_p(
       new ::SampleConsensusModelPlane<PointXYZ>(xyz_cloud_ptr));
@@ -58,7 +64,10 @@ Calibration3DMarker::Calibration3DMarker(cv::Mat _frame_gray, cv::Mat _P, ::Poin
 
   copyPointCloud<PointXYZ>(*xyz_cloud_ptr, inliers_indicies, plane);
 
-  std::cout << "Points in Plane = " << plane.size() << std::endl;   
+  PointCloud<PointXYZ>::Ptr plane_ptr(new PointCloud<PointXYZ>(plane));
+
+  std::cout << "Points in Plane = " << plane.size() << std::endl;
+
 
   // ---------------- REMOVE LINES ----------------
 
@@ -107,7 +116,7 @@ bool Calibration3DMarker::detectCirclesInPointCloud(vector<Point3f> &centers, ve
   bool detected = false;
   for (int iterations = 0; iterations < 64; iterations++)
   {
-    /*cerr << endl << " =========== ROUND " << round++ << " =========== "
+/*    cerr << endl << " =========== ROUND " << round++ << " =========== "
      << endl << endl;
      cerr << "detection_cloud size: " << detection_cloud->size() << endl;*/
     spheres_centers = detect4spheres(detection_cloud, radiuses);
@@ -115,10 +124,10 @@ bool Calibration3DMarker::detectCirclesInPointCloud(vector<Point3f> &centers, ve
     if (spheres_centers.size() == 4)
     {
       order4spheres(spheres_centers);
-      /*cerr << "ordered centers: " << endl;
+      cerr << "ordered centers: " << endl;
        for (size_t i = 0; i < spheres_centers.size(); i++) {
        cerr << spheres_centers[i] << endl;
-       }(*/
+       }
       if (verify4spheres(spheres_centers, this->circ_distance, tolerance))
       {
         spheres_centers = refine4centers(spheres_centers, detection_cloud);
@@ -146,6 +155,15 @@ vector<PointXYZ> Calibration3DMarker::detect4spheres(PointCloud<PointXYZ>::Ptr p
                                                           vector<float> &radiuses)
 {
 
+/*
+	pcl::visualization::CloudViewer viewer ("Plane Cloud");
+	viewer.showCloud(plane);
+
+	while (!viewer.wasStopped ())
+	{
+	}
+*/
+
   radiuses.clear();
   vector<PointXYZ> centers;
   std::vector<int> inliers_indicies;
@@ -155,7 +173,8 @@ vector<PointXYZ> Calibration3DMarker::detect4spheres(PointCloud<PointXYZ>::Ptr p
   {
     SampleConsensusModelSphere<PointXYZ>::Ptr model_s(
         new SampleConsensusModelSphere<PointXYZ>(plane));
-    model_s->setRadiusLimits(0.08, 0.09);
+    //model_s->setRadiusLimits(0.08, 0.09);
+    model_s->setRadiusLimits(0.11, 0.13);
     RandomSampleConsensus<PointXYZ> ransac_sphere(model_s);
     ransac_sphere.setDistanceThreshold(tolerance);
     ransac_sphere.computeModel();
