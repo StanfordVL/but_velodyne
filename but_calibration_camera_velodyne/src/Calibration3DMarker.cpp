@@ -46,12 +46,12 @@ Calibration3DMarker::Calibration3DMarker(cv::Mat _frame_gray, cv::Mat _P, ::Poin
 
   PointCloud<PointXYZ>::Ptr xyz_cloud_ptr(thresholded_scan.toPointsXYZ());
 
-  pcl::visualization::CloudViewer viewer ("Plane Cloud");
+/*  pcl::visualization::CloudViewer viewer ("Plane Cloud");
   viewer.showCloud(xyz_cloud_ptr);
 
   while (!viewer.wasStopped ())
   {
-  }
+  }*/
 
   SampleConsensusModelPlane<PointXYZ>::Ptr model_p(
       new ::SampleConsensusModelPlane<PointXYZ>(xyz_cloud_ptr));
@@ -168,7 +168,7 @@ vector<PointXYZ> Calibration3DMarker::detect4spheres(PointCloud<PointXYZ>::Ptr p
   vector<PointXYZ> centers;
   std::vector<int> inliers_indicies;
   PointCloud<PointXYZ> *four_spheres = new PointCloud<PointXYZ>();
-  float tolerance = 0.02;
+  float tolerance = 0.005;
   for (int i = 0; i < 4; i++)
   {
     SampleConsensusModelSphere<PointXYZ>::Ptr model_s(
@@ -179,8 +179,8 @@ vector<PointXYZ> Calibration3DMarker::detect4spheres(PointCloud<PointXYZ>::Ptr p
     ransac_sphere.setDistanceThreshold(tolerance);
     ransac_sphere.computeModel();
     inliers_indicies.clear();
-    std::cout << "Sphere Inliers: " << inliers_indicies.size() << std::endl;
     ransac_sphere.getInliers(inliers_indicies);
+    std::cout << "Sphere Inliers: " << inliers_indicies.size() << std::endl;
 
     if (inliers_indicies.size() == 0)
     {

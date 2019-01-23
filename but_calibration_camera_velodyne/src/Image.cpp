@@ -192,9 +192,9 @@ bool Image::detect4Circles(float canny_thresh, float center_thresh, vector<Point
 	  circle(src_rgb, center, radius, colors[i], 3, 8, 0);
 	  cerr << i+1 << ". circle S("<<center.x<<","<<center.y<<"); r="<<radius << endl;
   }
-/*  namedWindow("Hough Circle Transform Demo", CV_WINDOW_AUTOSIZE);
+  namedWindow("Hough Circle Transform Demo", CV_WINDOW_AUTOSIZE);
   imshow("Hough Circle Transform Demo", src_rgb);
-  waitKey(5);*/
+  waitKey(5);
 
   return true;
 }
